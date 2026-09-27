@@ -1,6 +1,7 @@
 from langchain_huggingface import ChatHuggingFace,HuggingFaceEndpoint
 from dotenv import load_dotenv
-from langchain_core.output_parsers import StrOutputParser
+from langchain_core.output_parsers import StrOutputParser,JsonOutputParser
+from langchain_core.prompts import PromptTemplate
 
 
 load_dotenv()
@@ -13,9 +14,16 @@ llm=HuggingFaceEndpoint(
 model=ChatHuggingFace(llm=llm)
 
 output=input("hi prompt please ")
-response=model.invoke(output)
 
-parser=StrOutputParser()
 
-res=parser.invoke(response)
-print(res)
+parser=JsonOutputParser()
+
+template=PromptTemplate(
+    template="answer the query {query} in {instructions}",
+   input_variables=["query"],
+   partial_variables={"instructions":parser.get_format_instructions()}
+)
+
+chain=template | model | parser
+r=chain.invoke({"query":output})
+print(r)
