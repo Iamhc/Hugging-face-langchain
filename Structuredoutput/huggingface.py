@@ -1,5 +1,7 @@
 from langchain_huggingface import ChatHuggingFace,HuggingFaceEndpoint
 from dotenv import load_dotenv
+from langchain_core.output_parsers import StrOutputParser
+
 
 load_dotenv()
 
@@ -10,8 +12,10 @@ llm=HuggingFaceEndpoint(
 )
 model=ChatHuggingFace(llm=llm)
 
-
 output=input("hi prompt please ")
 response=model.invoke(output)
 
-print(response.content)
+parser=StrOutputParser()
+
+res=parser.invoke(response)
+print(res)
