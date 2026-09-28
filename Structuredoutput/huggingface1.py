@@ -13,7 +13,7 @@ llm=HuggingFaceEndpoint(
 )
 model=ChatHuggingFace(llm=llm)
 
-output=input("hi prompt please ")
+output=input("prompt please ")
 
 
 parser=JsonOutputParser()
