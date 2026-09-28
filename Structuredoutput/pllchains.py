@@ -1,7 +1,14 @@
 from langchain_huggingface import HuggingFaceEndpoint,ChatHuggingFace
 from dotenv import load_dotenv
+from langchain_core.runnables import RunnableParallel
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import PromptTemplate
+from operator import itemgetter
+
 
 load_dotenv()
+
+parser=StrOutputParser()
 
 llm=HuggingFaceEndpoint(
    repo_id="meta-llama/Llama-3.1-8B-Instruct",
@@ -9,8 +16,23 @@ llm=HuggingFaceEndpoint(
     task="text-generation"
 )
 
-model=ChatHuggingFace(llm=llm)
+model=ChatHuggingFace(llm=llm) 
 
-res=model.invoke("hi")
+topic=PromptTemplate.from_template("prepare a topic random on tech") | model | parser
 
-print(res.content)
+quiz=PromptTemplate.from_template("Get questions on {topic}") | model | parser
+
+pllchain=RunnableParallel({
+"info":itemgetter("topic"), """"info assigned here"""
+"quiz": quiz
+}
+)
+
+prompt3=PromptTemplate.from_template(
+    "Get sols with those questions on {info} with questions {quiz}"
+)
+
+ans=( {"topic":topic } | pllchain | prompt3 | model | parser ).invoke({})
+""" "topic"  assigned here  """
+
+print(ans)
