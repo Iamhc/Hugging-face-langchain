@@ -23,7 +23,7 @@ topic=PromptTemplate.from_template("prepare a topic random on tech") | model | p
 quiz=PromptTemplate.from_template("Get questions on {topic}") | model | parser
 
 pllchain=RunnableParallel({
-"info":itemgetter("topic"), """"info assigned here"""
+"info":itemgetter("topic"), # info assigned here"""
 "quiz": quiz
 }
 )
@@ -32,7 +32,9 @@ prompt3=PromptTemplate.from_template(
     "Get sols with those questions on {info} with questions {quiz}"
 )
 
-ans=( {"topic":topic } | pllchain | prompt3 | model | parser ).invoke({})
-""" "topic"  assigned here  """
+chain={"topic":topic } | pllchain | prompt3 | model | parser 
+ans=chain.invoke({})
+# "topic"  assigned here  """
 
+chain.get_graph().print_ascii()
 print(ans)
