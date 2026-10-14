@@ -16,7 +16,7 @@ model=ChatHuggingFace(llm=llm)
 
 prompt1=PromptTemplate(template="get me random topic in science not known well known",input_variables=[])
 
-prompt2=PromptTemplate(template="tell random fact about {text}",input_variables=["text"])
+prompt2=PromptTemplate(template="tell random fact about {text} within 100 words",input_variables=["text"])
 
 parser=StrOutputParser()
 
