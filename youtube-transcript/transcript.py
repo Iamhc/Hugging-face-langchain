@@ -15,7 +15,7 @@ llm = ChatOllama(
 
 ytt_api = YouTubeTranscriptApi()
 res=ytt_api.fetch('abiL84EAWSY')
-
+#yt api
 ans=""
 
 for input in res:
