@@ -12,7 +12,7 @@ llm = ChatOllama(
 
 load_dotenv()
 
-query="convert 10 inr to usd dollar,use convert tool"
+query="convert 10 usd to inr"
 
 
 hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
